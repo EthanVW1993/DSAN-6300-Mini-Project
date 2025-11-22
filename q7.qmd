@@ -1,0 +1,67 @@
+---
+title: "Q7 – 3-Day Rolling Average of Daily Flight Volume"
+---
+
+# Question
+
+**Build a report that, for each day, outputs the average number of flights over the preceding 3 days.**  
+
+## SQL Query
+
+The SQL Query used to answer this question is provided below.
+
+``` sql
+WITH daily_counts AS (
+    SELECT
+        FlightDate,
+        COUNT(*) AS flight_count
+    FROM al_perf
+    GROUP BY FlightDate
+)
+SELECT
+    FlightDate,
+    flight_count,
+    ROUND(
+        AVG(flight_count) OVER (
+            ORDER BY FlightDate
+            ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING
+        ), 2
+    ) AS avg_prev_3_days
+FROM daily_counts
+ORDER BY FlightDate;
+```
+
+## Output
+
+The output of this SQL query is saved as `Question 7 output.csv`, and is provided below.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+q7 <- read_csv("data/Question 7 output.csv")
+q7
+```
+
+## Visualization
+
+```{r}
+q7 <- q7 %>%
+  mutate(
+    FlightDate = as.Date(FlightDate),
+    avg_prev_3_days = na_if(avg_prev_3_days, "NULL"),
+    avg_prev_3_days = as.numeric(avg_prev_3_days)
+  )
+
+q7 %>%
+  ggplot(aes(x = FlightDate)) +
+  geom_line(aes(y = flight_count), color = "#4C72B0", linewidth = 1) +
+  geom_line(aes(y = avg_prev_3_days), color = "#DD8452", linewidth = 1, linetype = "dashed") +
+  labs(
+    title = "Daily Flight Counts with 3-Day Rolling Average",
+    x = "Date",
+    y = "Number of Flights",
+    caption = "Solid blue = daily flights | Dashed orange = 3-day rolling average"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+The daily flight counts show a consistent weekly rhythm, with noticeable dips roughly once every seven days—likely corresponding to lower weekend travel volume. The 3-day rolling average smooths these fluctuations, revealing a stable overall trend of around 19,000–21,000 flights per day throughout March 2018. This smoothed trend provides a clearer picture of underlying flight activity, helping distinguish real shifts in demand from routine day-to-day variability.

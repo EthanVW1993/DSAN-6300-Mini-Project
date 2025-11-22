@@ -1,0 +1,68 @@
+---
+title: "Q5 – Airport with Highest Average Delay per Airline"
+---
+
+# Question
+
+**For each airline, find the airport where it has the highest average departure delay.  
+Output the airline name, the airport name, and the value of that average delay.**
+
+## SQL Query
+
+The SQL Query used to answer this question is provided below.
+
+```sql
+WITH avg_delays AS (
+  SELECT
+    Reporting_Airline AS airline,
+    OriginAirportName AS airport_name,
+    OriginAirportCode AS airport_code,
+    AVG(GREATEST(DepDelay, 0)) AS avg_delay
+  FROM al_perf
+  GROUP BY Reporting_Airline, OriginAirportName, OriginAirportCode
+),
+ranked AS (
+  SELECT
+    airline,
+    airport_name,
+    airport_code,
+    avg_delay,
+    RANK() OVER (PARTITION BY airline ORDER BY avg_delay DESC) AS rnk
+  FROM avg_delays
+)
+SELECT
+  airline,
+  airport_name,
+  airport_code,
+  avg_delay
+FROM ranked
+WHERE rnk = 1
+ORDER BY airline;
+```
+
+## Output 
+
+The output of this SQL query is saved as `Question 5 output.csv`, and is provided below.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+q5 <- read_csv("data/Question 5 output.csv")
+q5
+```
+
+## Visualization
+
+```{r}
+q5 %>%
+ggplot(aes(x = reorder(airline, avg_delay), y = avg_delay)) +
+geom_col(fill = "#4C72B0") +
+coord_flip() +
+labs(
+title = "Airline Worst-Delay Airport (Highest Avg Delay)",
+x = "Airline",
+y = "Average Delay at Worst Airport (minutes)"
+) +
+theme_minimal(base_size = 14)
+```
+
+The chart shows the airport where each airline experiences its highest average departure delay, revealing large differences between carriers. One airline in particular (9E) faces dramatically higher delays at its worst airport—nearly 300 minutes on average—far exceeding all others. This highlights how operational bottlenecks can be highly localized and suggests that targeted improvements at specific airports could significantly reduce delays for certain airlines.
