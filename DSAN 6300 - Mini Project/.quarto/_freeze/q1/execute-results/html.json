@@ -1,0 +1,17 @@
+{
+  "hash": "9aeb441b0cf554a43e0f2460cf3b468d",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Q1 — Maximum Departure Delays by Airline\"\n---\n\n# Question\n\n**Find the maximal departure delay in minutes for each airline.\\\nSort results from smallest to largest maximum delay. Output airline names and the delay values.**\n\n## SQL Query\n\nThe SQL Query used to answer this question is provided below.\n\n```sql\nSELECT\n    Reporting_Airline AS airline,\n    MAX(DepDelay) AS max_delay\nFROM al_perf\nGROUP BY Reporting_Airline\nORDER BY max_delay ASC;\n```\n\n## Output \n\nThe output of this SQL query is saved as `Question 1 output.csv`, and is provided below.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\nq1 <- read_csv(\"data/Question 1 output.csv\")\nq1\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n# A tibble: 19 × 2\n   airline           max_departure_delay\n   <chr>                           <dbl>\n 1 Reporting_Airline                   0\n 2 VX                                472\n 3 WN                                563\n 4 AS                                571\n 5 OH                                692\n 6 F9                                726\n 7 B6                                730\n 8 MQ                                764\n 9 G4                                805\n10 9E                               1093\n11 DL                               1113\n12 YV                               1176\n13 YX                               1178\n14 HA                               1260\n15 EV                               1304\n16 NK                               1306\n17 UA                               1333\n18 OO                               1417\n19 AA                               1559\n```\n\n\n:::\n:::\n\n\n## Visualization\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(ggplot2)\n\nq1 %>%\n  ggplot(aes(x = reorder(airline, max_departure_delay),\n             y = max_departure_delay)) +\n  geom_col(fill = \"#4C72B0\") +\n  coord_flip() +\n  labs(\n    title = \"Maximum Departure Delay by Airline\",\n    x = \"Airline\",\n    y = \"Maximum Delay (minutes)\"\n  ) +\n  theme_minimal(base_size = 14)\n```\n\n::: {.cell-output-display}\n![](q1_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\n\nThe visualization shows that maximum departure delays vary dramatically by airline, with some carriers experiencing extreme outlier delays exceeding 1,500 minutes. A small group of airlines—particularly AA, OO, and UA—record the highest maximum delays, indicating exposure to rare but severe operational disruptions. In contrast, several other airlines exhibit much lower worst-case delays, reflecting more stable performance or fewer extreme delay events.",
+    "supporting": [
+      "q1_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

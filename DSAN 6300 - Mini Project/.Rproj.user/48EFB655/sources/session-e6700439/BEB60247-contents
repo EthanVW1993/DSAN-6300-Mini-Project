@@ -1,0 +1,128 @@
+---
+title: "Q5 - Cancelled Flights"
+---
+
+# Question 6a
+
+** Check if your dataset has any canceled flights.**
+
+## SQL Query for 6a
+
+The SQL Query used to answer this question is provided below.
+
+``` sql
+SELECT COUNT(*) AS canceled_flights
+FROM al_perf
+WHERE Cancelled = 1;
+```
+# Question 6b
+
+** For each departure airport, find the most frequent cancellation reason.**
+```sql
+WITH cancel_counts AS (
+    SELECT 
+        OriginCityName AS airport_name,
+        Origin AS airport_code,
+        CancellationCode AS reason,
+        COUNT(*) AS cancel_count
+    FROM al_perf
+    WHERE Cancelled = 1
+    GROUP BY OriginCityName, Origin, CancellationCode
+),
+ranked AS (
+    SELECT
+        airport_name,
+        airport_code,
+        reason,
+        cancel_count,
+        RANK() OVER (
+            PARTITION BY airport_name
+            ORDER BY cancel_count DESC
+        ) AS rnk
+    FROM cancel_counts
+)
+SELECT
+    airport_name,
+    airport_code,
+    reason,
+    cancel_count
+FROM ranked
+WHERE rnk = 1
+ORDER BY airport_name;
+```
+
+## Output
+
+The output of this SQL query is saved as `Question 6b output.csv`, and is provided below.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+
+q6b <- read_csv("data/Question 6b output.csv")
+q6b
+```
+
+
+## Visualization
+
+```{r}
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+
+# ----------------------------
+# Load Q6b cancellation data
+# ----------------------------
+q6b <- read_csv("data/Question 6b output.csv")
+
+# ----------------------------
+# Load FAA/OpenFlights Airport Coordinates
+# ----------------------------
+faa_airports <- read_csv(
+  "https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat",
+  col_names = FALSE
+) %>%
+  select(
+    airport_id = X1,
+    airport_name = X2,
+    city = X3,
+    country = X4,
+    IATA = X5,
+    latitude = X7,
+    longitude = X8
+  ) %>%
+  filter(country == "United States", !is.na(IATA), IATA != "\\N")
+
+# ----------------------------
+# Join Q6b cancellations with airport coordinates
+# ----------------------------
+q6_map <- q6b %>%
+  left_join(faa_airports, by = c("airport_code" = "IATA"))
+
+# ----------------------------
+# Plot U.S. map with cancellation bubbles
+# ----------------------------
+states_map <- map_data("state")
+
+ggplot() +
+  geom_polygon(
+    data = states_map,
+    aes(x = long, y = lat, group = group),
+    fill = "gray95", color = "white"
+  ) +
+  geom_point(
+    data = q6_map,
+    aes(x = longitude, y = latitude, size = cancel_count),
+    color = "#4C72B0", alpha = 0.7
+  ) +
+  scale_size_continuous(range = c(2, 10)) +
+  coord_fixed(1.3) +
+  labs(
+    title = "Flight Cancellations by Airport (Q6b)",
+    x = "Longitude",
+    y = "Latitude",
+    size = "Cancellation Count"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+The map shows how flight cancellations in March 2018 are distributed across U.S. airports, with larger points indicating airports experiencing higher cancellation volumes. Most cancellations cluster around major hubs in the eastern and central United States, where traffic density is highest. A few western airports also show elevated cancellation counts, highlighting how both weather patterns and congestion can drive regional differences in flight disruptions.

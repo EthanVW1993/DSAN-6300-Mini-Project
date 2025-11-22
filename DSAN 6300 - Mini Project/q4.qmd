@@ -1,0 +1,48 @@
+---
+title: "Q4 – Airport with Highest Average Departure Delay"
+---
+
+# Question
+
+**Find the airport that has the highest average departure delay among all airports.  
+Consider 0 minutes delay for flights that departed early.  
+Output the airport name, airport code, and the average delay.**
+
+## SQL Query
+
+```sql
+SELECT
+  OriginAirportName AS airport_name,
+  OriginAirportCode AS airport_code,
+  AVG(GREATEST(DepDelay, 0)) AS avg_delay
+FROM al_perf
+GROUP BY OriginAirportName, OriginAirportCode
+ORDER BY avg_delay DESC
+LIMIT 1;
+```
+## Output 
+
+The output of this SQL query is saved as `Question 4 output.csv`, and is provided below.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+
+q4 <- read_csv("data/Question 4 output.csv")
+q4
+```
+
+## Visualization
+
+```{r}
+q4 %>%
+ggplot(aes(x = airport_code, y = avg_delay)) +
+geom_col(fill = "#4C72B0") +
+labs(
+title = "Airport with the Highest Average Departure Delay",
+x = "Airport Code",
+y = "Average Delay (minutes)"
+) +
+theme_minimal(base_size = 14)
+```
+
+The visual for this output is not going to provide a lot of information as the question is only asking for the airport with the highest average departure delay. As we can see, the answer is Bingham airport in New York.

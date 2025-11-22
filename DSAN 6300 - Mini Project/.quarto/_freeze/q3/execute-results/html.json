@@ -1,0 +1,17 @@
+{
+  "hash": "27d032c239d26dbe20012aa563e8efbd",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Q3 – Ranking Days of the Week by Flight Volume\"\n---\n\n# Question\n\n**Rank days of the week by the total number of flights (1 = busiest).  \nOutput the day name, number of flights, and the rank.**\n\n## SQL Query\n\n```sql\nWITH day_counts AS (\n    SELECT \n        DayOfWeek,\n        COUNT(*) AS flight_count\n    FROM al_perf\n    GROUP BY DayOfWeek\n),\nranked AS (\n    SELECT\n        CASE DayOfWeek\n            WHEN 1 THEN 'Monday'\n            WHEN 2 THEN 'Tuesday'\n            WHEN 3 THEN 'Wednesday'\n            WHEN 4 THEN 'Thursday'\n            WHEN 5 THEN 'Friday'\n            WHEN 6 THEN 'Saturday'\n            WHEN 7 THEN 'Sunday'\n        END AS day_name,\n        flight_count,\n        RANK() OVER (ORDER BY flight_count DESC) AS day_rank\n    FROM day_counts\n)\nSELECT *\nFROM ranked\nORDER BY day_rank;\n```\n## Output \n\nThe output of this SQL query is saved as `Question 3 output.csv`, and is provided below.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\n\nq3 <- read_csv(\"data/Question 3 output.csv\")\nq3\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n# A tibble: 8 × 3\n  day_name  flight_count day_rank\n  <chr>            <dbl>    <dbl>\n1 Friday          102866        1\n2 Thursday        102437        2\n3 Saturday         84778        3\n4 Monday           82000        4\n5 Wednesday        81039        5\n6 Tuesday          80177        6\n7 Sunday           78737        7\n8 NULL                 1        8\n```\n\n\n:::\n:::\n\n\n## Visualization\n\n\n::: {.cell}\n\n```{.r .cell-code}\nq3$day_name <- factor(\n  q3$day_name,\n  levels = c(\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\")\n)\n\nq3 %>%\n  ggplot(aes(x = day_name, y = flight_count)) +\n  geom_col(fill = \"#4C72B0\") +\n  labs(\n    title = \"Flight Volume by Day of the Week\",\n    x = \"Day of Week\",\n    y = \"Number of Flights\"\n  ) +\n  theme_minimal(base_size = 16) +\n  theme(\n    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),\n    plot.title = element_text(size = 22, face = \"bold\", hjust = 0.5)\n  )\n```\n\n::: {.cell-output-display}\n![](q3_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\n\nThe chart shows a clear weekly rhythm in U.S. flight activity, with Thursday and Friday standing out as the busiest travel days, each handling over 100,000 flights. Sunday through Wednesday maintain moderate and fairly consistent traffic levels, reflecting steady weekday demand. Saturday experiences a noticeable dip, making it the least active day of the week aside from missing values, which aligns with lower weekend business travel.",
+    "supporting": [
+      "q3_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

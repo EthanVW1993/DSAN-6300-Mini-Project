@@ -1,0 +1,15 @@
+{
+  "hash": "de6b26c795f6e64cc942e12223639bcf",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"DSAN 6300 - Mini Project - A real world analysis of Airline Data\"\nauthor: \"Ethan Wotring\"\n---\n\nThis Quarto website provides an overview of airline performance data from March 2018. The dataset, obtained from the Federal Aviation Administration (FAA), includes detailed information about flights, airlines, and airports across the United States. Through a series of SQL-driven analyses and visualizations, this site explores key operational patterns—such as delays, cancellations, and traffic trends—to build a clearer picture of how air travel functions across the country. The goal is to transform raw data into meaningful insights that help us better understand the dynamics of air travel in the United States.\n\n\n::: {.cell}\n\n```{.r .cell-code}\n1 + 1\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 2\n```\n\n\n:::\n:::\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

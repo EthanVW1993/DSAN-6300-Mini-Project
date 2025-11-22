@@ -1,0 +1,48 @@
+---
+title: "Q2 – Maximum Early Departures by Airline"
+---
+
+# Question
+
+**Find maximal early departures (negative departure delays) in minutes for each airline.\
+Sort results from largest to smallest (i.e., earliest departures first).\
+Output airline names.**
+
+## SQL Query
+
+```sql
+SELECT 
+    Reporting_Airline AS airline,
+    MIN(DepDelay) AS max_early_departure
+FROM al_perf
+GROUP BY Reporting_Airline
+ORDER BY max_early_departure ASC;
+```
+
+## Output 
+
+The output of this SQL query is saved as `Question 2 output.csv`, and is provided below.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+q2 <- read_csv("data/Question 2 output.csv")
+q2
+```
+
+## Visualization
+
+```{r}
+q2 %>%
+ggplot(aes(x = reorder(airline, max_early_departure),
+y = max_early_departure)) +
+geom_col(fill = "#4C72B0") +
+coord_flip() +
+labs(
+title = "Most Early Departures by Airline",
+x = "Airline",
+y = "Maximum Early Departure (minutes)"
+) +
+theme_minimal(base_size = 14)
+```
+
+The visualization highlights which airlines had the earliest recorded departures, meaning the most negative delay times. Airlines at the top of the chart departed significantly earlier than their scheduled times. This helps us understand which carriers tend to push out flights ahead of schedule — an operational behavior that may influence passenger satisfaction and on-time performance metrics.

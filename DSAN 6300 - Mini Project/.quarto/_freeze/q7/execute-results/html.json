@@ -1,0 +1,17 @@
+{
+  "hash": "6fea49ef36db699e2d8357d56d9dcd86",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Q7 – 3-Day Rolling Average of Daily Flight Volume\"\n---\n\n# Question\n\n**Build a report that, for each day, outputs the average number of flights over the preceding 3 days.**  \n\n## SQL Query\n\nThe SQL Query used to answer this question is provided below.\n\n``` sql\nWITH daily_counts AS (\n    SELECT\n        FlightDate,\n        COUNT(*) AS flight_count\n    FROM al_perf\n    GROUP BY FlightDate\n)\nSELECT\n    FlightDate,\n    flight_count,\n    ROUND(\n        AVG(flight_count) OVER (\n            ORDER BY FlightDate\n            ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING\n        ), 2\n    ) AS avg_prev_3_days\nFROM daily_counts\nORDER BY FlightDate;\n```\n\n## Output\n\nThe output of this SQL query is saved as `Question 7 output.csv`, and is provided below.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\nq7 <- read_csv(\"data/Question 7 output.csv\")\nq7\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n# A tibble: 32 × 3\n   FlightDate flight_count avg_prev_3_days\n   <chr>             <dbl> <chr>          \n 1 2018-03-01        20004 NULL           \n 2 2018-03-02        20225 20004.00       \n 3 2018-03-03        16128 20114.50       \n 4 2018-03-04        18978 18785.67       \n 5 2018-03-05        20161 18443.67       \n 6 2018-03-06        19673 18422.33       \n 7 2018-03-07        19924 19604.00       \n 8 2018-03-08        20417 19919.33       \n 9 2018-03-09        20609 20004.67       \n10 2018-03-10        17180 20316.67       \n# ℹ 22 more rows\n```\n\n\n:::\n:::\n\n\n## Visualization\n\n\n::: {.cell}\n\n```{.r .cell-code}\nq7 <- q7 %>%\n  mutate(\n    FlightDate = as.Date(FlightDate),\n    avg_prev_3_days = na_if(avg_prev_3_days, \"NULL\"),\n    avg_prev_3_days = as.numeric(avg_prev_3_days)\n  )\n\nq7 %>%\n  ggplot(aes(x = FlightDate)) +\n  geom_line(aes(y = flight_count), color = \"#4C72B0\", linewidth = 1) +\n  geom_line(aes(y = avg_prev_3_days), color = \"#DD8452\", linewidth = 1, linetype = \"dashed\") +\n  labs(\n    title = \"Daily Flight Counts with 3-Day Rolling Average\",\n    x = \"Date\",\n    y = \"Number of Flights\",\n    caption = \"Solid blue = daily flights | Dashed orange = 3-day rolling average\"\n  ) +\n  theme_minimal(base_size = 14)\n```\n\n::: {.cell-output .cell-output-stderr}\n\n```\nWarning: Removed 1 row containing missing values or values outside the scale range\n(`geom_line()`).\n```\n\n\n:::\n\n::: {.cell-output .cell-output-stderr}\n\n```\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_line()`).\n```\n\n\n:::\n\n::: {.cell-output-display}\n![](q7_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\n\nThe daily flight counts show a consistent weekly rhythm, with noticeable dips roughly once every seven days—likely corresponding to lower weekend travel volume. The 3-day rolling average smooths these fluctuations, revealing a stable overall trend of around 19,000–21,000 flights per day throughout March 2018. This smoothed trend provides a clearer picture of underlying flight activity, helping distinguish real shifts in demand from routine day-to-day variability.\n",
+    "supporting": [
+      "q7_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

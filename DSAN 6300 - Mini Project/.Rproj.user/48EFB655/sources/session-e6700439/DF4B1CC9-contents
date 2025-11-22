@@ -1,0 +1,73 @@
+---
+title: "Q3 – Ranking Days of the Week by Flight Volume"
+---
+
+# Question
+
+**Rank days of the week by the total number of flights (1 = busiest).  
+Output the day name, number of flights, and the rank.**
+
+## SQL Query
+
+```sql
+WITH day_counts AS (
+    SELECT 
+        DayOfWeek,
+        COUNT(*) AS flight_count
+    FROM al_perf
+    GROUP BY DayOfWeek
+),
+ranked AS (
+    SELECT
+        CASE DayOfWeek
+            WHEN 1 THEN 'Monday'
+            WHEN 2 THEN 'Tuesday'
+            WHEN 3 THEN 'Wednesday'
+            WHEN 4 THEN 'Thursday'
+            WHEN 5 THEN 'Friday'
+            WHEN 6 THEN 'Saturday'
+            WHEN 7 THEN 'Sunday'
+        END AS day_name,
+        flight_count,
+        RANK() OVER (ORDER BY flight_count DESC) AS day_rank
+    FROM day_counts
+)
+SELECT *
+FROM ranked
+ORDER BY day_rank;
+```
+## Output 
+
+The output of this SQL query is saved as `Question 3 output.csv`, and is provided below.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+
+q3 <- read_csv("data/Question 3 output.csv")
+q3
+```
+
+## Visualization
+
+```{r}
+q3$day_name <- factor(
+  q3$day_name,
+  levels = c("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday")
+)
+
+q3 %>%
+  ggplot(aes(x = day_name, y = flight_count)) +
+  geom_col(fill = "#4C72B0") +
+  labs(
+    title = "Flight Volume by Day of the Week",
+    x = "Day of Week",
+    y = "Number of Flights"
+  ) +
+  theme_minimal(base_size = 16) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),
+    plot.title = element_text(size = 22, face = "bold", hjust = 0.5)
+  )
+```
+
+The chart shows a clear weekly rhythm in U.S. flight activity, with Thursday and Friday standing out as the busiest travel days, each handling over 100,000 flights. Sunday through Wednesday maintain moderate and fairly consistent traffic levels, reflecting steady weekday demand. Saturday experiences a noticeable dip, making it the least active day of the week aside from missing values, which aligns with lower weekend business travel.

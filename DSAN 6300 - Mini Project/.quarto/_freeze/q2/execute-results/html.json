@@ -1,0 +1,17 @@
+{
+  "hash": "469ccff61d300769eb92872c5bc5370a",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Q2 – Maximum Early Departures by Airline\"\n---\n\n# Question\n\n**Find maximal early departures (negative departure delays) in minutes for each airline.\\\nSort results from largest to smallest (i.e., earliest departures first).\\\nOutput airline names.**\n\n## SQL Query\n\n```sql\nSELECT \n    Reporting_Airline AS airline,\n    MIN(DepDelay) AS max_early_departure\nFROM al_perf\nGROUP BY Reporting_Airline\nORDER BY max_early_departure ASC;\n```\n\n## Output \n\nThe output of this SQL query is saved as `Question 2 output.csv`, and is provided below.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\nq2 <- read_csv(\"data/Question 2 output.csv\")\nq2\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n# A tibble: 19 × 2\n   airline           max_early_departure\n   <chr>                           <dbl>\n 1 AS                               -114\n 2 OO                                -60\n 3 DL                                -37\n 4 G4                                -35\n 5 MQ                                -34\n 6 OH                                -32\n 7 NK                                -31\n 8 B6                                -31\n 9 EV                                -30\n10 WN                                -29\n11 YX                                -27\n12 AA                                -25\n13 F9                                -25\n14 9E                                -23\n15 YV                                -23\n16 VX                                -23\n17 UA                                -23\n18 HA                                -21\n19 Reporting_Airline                   0\n```\n\n\n:::\n:::\n\n\n## Visualization\n\n\n::: {.cell}\n\n```{.r .cell-code}\nq2 %>%\nggplot(aes(x = reorder(airline, max_early_departure),\ny = max_early_departure)) +\ngeom_col(fill = \"#4C72B0\") +\ncoord_flip() +\nlabs(\ntitle = \"Most Early Departures by Airline\",\nx = \"Airline\",\ny = \"Maximum Early Departure (minutes)\"\n) +\ntheme_minimal(base_size = 14)\n```\n\n::: {.cell-output-display}\n![](q2_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\n\nThe visualization highlights which airlines had the earliest recorded departures, meaning the most negative delay times. Airlines at the top of the chart departed significantly earlier than their scheduled times. This helps us understand which carriers tend to push out flights ahead of schedule — an operational behavior that may influence passenger satisfaction and on-time performance metrics.\n",
+    "supporting": [
+      "q2_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

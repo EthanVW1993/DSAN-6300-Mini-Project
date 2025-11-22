@@ -1,0 +1,17 @@
+{
+  "hash": "7da11e2149ba95c25dbd740ee572b352",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Q4 – Airport with Highest Average Departure Delay\"\n---\n\n# Question\n\n**Find the airport that has the highest average departure delay among all airports.  \nConsider 0 minutes delay for flights that departed early.  \nOutput the airport name, airport code, and the average delay.**\n\n## SQL Query\n\n```sql\nSELECT\n  OriginAirportName AS airport_name,\n  OriginAirportCode AS airport_code,\n  AVG(GREATEST(DepDelay, 0)) AS avg_delay\nFROM al_perf\nGROUP BY OriginAirportName, OriginAirportCode\nORDER BY avg_delay DESC\nLIMIT 1;\n```\n## Output \n\nThe output of this SQL query is saved as `Question 4 output.csv`, and is provided below.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\n\nq4 <- read_csv(\"data/Question 4 output.csv\")\nq4\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n# A tibble: 1 × 3\n  airport_name   airport_code avg_delay\n  <chr>          <chr>            <dbl>\n1 Binghamton, NY BGM               46.2\n```\n\n\n:::\n:::\n\n\n## Visualization\n\n\n::: {.cell}\n\n```{.r .cell-code}\nq4 %>%\nggplot(aes(x = airport_code, y = avg_delay)) +\ngeom_col(fill = \"#4C72B0\") +\nlabs(\ntitle = \"Airport with the Highest Average Departure Delay\",\nx = \"Airport Code\",\ny = \"Average Delay (minutes)\"\n) +\ntheme_minimal(base_size = 14)\n```\n\n::: {.cell-output-display}\n![](q4_files/figure-html/unnamed-chunk-2-1.png){width=672}\n:::\n:::\n\n\nThe visual for this output is not going to provide a lot of information as the question is only asking for the airport with the highest average departure delay. As we can see, the answer is Bingham airport in New York.",
+    "supporting": [
+      "q4_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

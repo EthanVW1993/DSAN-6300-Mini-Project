@@ -1,0 +1,51 @@
+---
+title: "Q1 — Maximum Departure Delays by Airline"
+---
+
+# Question
+
+**Find the maximal departure delay in minutes for each airline.\
+Sort results from smallest to largest maximum delay. Output airline names and the delay values.**
+
+## SQL Query
+
+The SQL Query used to answer this question is provided below.
+
+```sql
+SELECT
+    Reporting_Airline AS airline,
+    MAX(DepDelay) AS max_delay
+FROM al_perf
+GROUP BY Reporting_Airline
+ORDER BY max_delay ASC;
+```
+
+## Output 
+
+The output of this SQL query is saved as `Question 1 output.csv`, and is provided below.
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+q1 <- read_csv("data/Question 1 output.csv")
+q1
+```
+
+## Visualization
+
+```{r}
+library(ggplot2)
+
+q1 %>%
+  ggplot(aes(x = reorder(airline, max_departure_delay),
+             y = max_departure_delay)) +
+  geom_col(fill = "#4C72B0") +
+  coord_flip() +
+  labs(
+    title = "Maximum Departure Delay by Airline",
+    x = "Airline",
+    y = "Maximum Delay (minutes)"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+The visualization shows that maximum departure delays vary dramatically by airline, with some carriers experiencing extreme outlier delays exceeding 1,500 minutes. A small group of airlines—particularly AA, OO, and UA—record the highest maximum delays, indicating exposure to rare but severe operational disruptions. In contrast, several other airlines exhibit much lower worst-case delays, reflecting more stable performance or fewer extreme delay events.

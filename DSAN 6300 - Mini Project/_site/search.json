@@ -1,0 +1,233 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "DSAN 6300 - Mini Project - A real world analysis of Airline Data",
+    "section": "",
+    "text": "This Quarto website provides an overview of airline performance data from March 2018. The dataset, obtained from the Federal Aviation Administration (FAA), includes detailed information about flights, airlines, and airports across the United States. Through a series of SQL-driven analyses and visualizations, this site explores key operational patterns—such as delays, cancellations, and traffic trends—to build a clearer picture of how air travel functions across the country. The goal is to transform raw data into meaningful insights that help us better understand the dynamics of air travel in the United States."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "q1.html",
+    "href": "q1.html",
+    "title": "Q1 — Maximum Departure Delays by Airline",
+    "section": "",
+    "text": "Find the maximal departure delay in minutes for each airline.\nSort results from smallest to largest maximum delay. Output airline names and the delay values.\n\n\nThe SQL Query used to answer this question is provided below.\nSELECT\n    Reporting_Airline AS airline,\n    MAX(DepDelay) AS max_delay\nFROM al_perf\nGROUP BY Reporting_Airline\nORDER BY max_delay ASC;\n\n\n\nThe output of this SQL query is saved as Question 1 output.csv, and is provided below.\n\nlibrary(tidyverse)\nq1 &lt;- read_csv(\"data/Question 1 output.csv\")\nq1\n\n# A tibble: 19 × 2\n   airline           max_departure_delay\n   &lt;chr&gt;                           &lt;dbl&gt;\n 1 Reporting_Airline                   0\n 2 VX                                472\n 3 WN                                563\n 4 AS                                571\n 5 OH                                692\n 6 F9                                726\n 7 B6                                730\n 8 MQ                                764\n 9 G4                                805\n10 9E                               1093\n11 DL                               1113\n12 YV                               1176\n13 YX                               1178\n14 HA                               1260\n15 EV                               1304\n16 NK                               1306\n17 UA                               1333\n18 OO                               1417\n19 AA                               1559\n\n\n\n\n\n\nlibrary(ggplot2)\n\nq1 %&gt;%\n  ggplot(aes(x = reorder(airline, max_departure_delay),\n             y = max_departure_delay)) +\n  geom_col(fill = \"#4C72B0\") +\n  coord_flip() +\n  labs(\n    title = \"Maximum Departure Delay by Airline\",\n    x = \"Airline\",\n    y = \"Maximum Delay (minutes)\"\n  ) +\n  theme_minimal(base_size = 14)\n\n\n\n\n\n\n\n\nThe visualization shows that maximum departure delays vary dramatically by airline, with some carriers experiencing extreme outlier delays exceeding 1,500 minutes. A small group of airlines—particularly AA, OO, and UA—record the highest maximum delays, indicating exposure to rare but severe operational disruptions. In contrast, several other airlines exhibit much lower worst-case delays, reflecting more stable performance or fewer extreme delay events."
+  },
+  {
+    "objectID": "q1.html#load-data",
+    "href": "q1.html#load-data",
+    "title": "Q1 — Maximum Departure Delays by Airline",
+    "section": "",
+    "text": "library(tidyverse)\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.5\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.2     ✔ tibble    3.3.0\n✔ lubridate 1.9.4     ✔ tidyr     1.3.1\n✔ purrr     1.1.0     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nq1 &lt;- read_csv(\"data/Question 1 output.csv\")\n\nRows: 19 Columns: 2\n── Column specification ────────────────────────────────────────────────────────\nDelimiter: \",\"\nchr (1): airline\ndbl (1): max_departure_delay\n\nℹ Use `spec()` to retrieve the full column specification for this data.\nℹ Specify the column types or set `show_col_types = FALSE` to quiet this message."
+  },
+  {
+    "objectID": "q1.html#sql-query",
+    "href": "q1.html#sql-query",
+    "title": "Q1 — Maximum Departure Delays by Airline",
+    "section": "",
+    "text": "The SQL Query used to answer this question is provided below.\nSELECT\n    Reporting_Airline AS airline,\n    MAX(DepDelay) AS max_delay\nFROM al_perf\nGROUP BY Reporting_Airline\nORDER BY max_delay ASC;"
+  },
+  {
+    "objectID": "q1.html#output",
+    "href": "q1.html#output",
+    "title": "Q1 — Maximum Departure Delays by Airline",
+    "section": "",
+    "text": "The output of this SQL query is saved as Question 1 output.csv, and is provided below.\n\nlibrary(tidyverse)\nq1 &lt;- read_csv(\"data/Question 1 output.csv\")\nq1\n\n# A tibble: 19 × 2\n   airline           max_departure_delay\n   &lt;chr&gt;                           &lt;dbl&gt;\n 1 Reporting_Airline                   0\n 2 VX                                472\n 3 WN                                563\n 4 AS                                571\n 5 OH                                692\n 6 F9                                726\n 7 B6                                730\n 8 MQ                                764\n 9 G4                                805\n10 9E                               1093\n11 DL                               1113\n12 YV                               1176\n13 YX                               1178\n14 HA                               1260\n15 EV                               1304\n16 NK                               1306\n17 UA                               1333\n18 OO                               1417\n19 AA                               1559"
+  },
+  {
+    "objectID": "q1.html#visualization",
+    "href": "q1.html#visualization",
+    "title": "Q1 — Maximum Departure Delays by Airline",
+    "section": "",
+    "text": "library(ggplot2)\n\nq1 %&gt;%\n  ggplot(aes(x = reorder(airline, max_departure_delay),\n             y = max_departure_delay)) +\n  geom_col(fill = \"#4C72B0\") +\n  coord_flip() +\n  labs(\n    title = \"Maximum Departure Delay by Airline\",\n    x = \"Airline\",\n    y = \"Maximum Delay (minutes)\"\n  ) +\n  theme_minimal(base_size = 14)\n\n\n\n\n\n\n\n\nThe visualization shows that maximum departure delays vary dramatically by airline, with some carriers experiencing extreme outlier delays exceeding 1,500 minutes. A small group of airlines—particularly AA, OO, and UA—record the highest maximum delays, indicating exposure to rare but severe operational disruptions. In contrast, several other airlines exhibit much lower worst-case delays, reflecting more stable performance or fewer extreme delay events."
+  },
+  {
+    "objectID": "q2.html",
+    "href": "q2.html",
+    "title": "Q2 – Maximum Early Departures by Airline",
+    "section": "",
+    "text": "Find maximal early departures (negative departure delays) in minutes for each airline.\nSort results from largest to smallest (i.e., earliest departures first).\nOutput airline names.\n\n\nSELECT \n    Reporting_Airline AS airline,\n    MIN(DepDelay) AS max_early_departure\nFROM al_perf\nGROUP BY Reporting_Airline\nORDER BY max_early_departure ASC;\n\n\n\nThe output of this SQL query is saved as Question 2 output.csv, and is provided below.\n\nlibrary(tidyverse)\nq2 &lt;- read_csv(\"data/Question 2 output.csv\")\nq2\n\n# A tibble: 19 × 2\n   airline           max_early_departure\n   &lt;chr&gt;                           &lt;dbl&gt;\n 1 AS                               -114\n 2 OO                                -60\n 3 DL                                -37\n 4 G4                                -35\n 5 MQ                                -34\n 6 OH                                -32\n 7 NK                                -31\n 8 B6                                -31\n 9 EV                                -30\n10 WN                                -29\n11 YX                                -27\n12 AA                                -25\n13 F9                                -25\n14 9E                                -23\n15 YV                                -23\n16 VX                                -23\n17 UA                                -23\n18 HA                                -21\n19 Reporting_Airline                   0\n\n\n\n\n\n\nq2 %&gt;%\nggplot(aes(x = reorder(airline, max_early_departure),\ny = max_early_departure)) +\ngeom_col(fill = \"#4C72B0\") +\ncoord_flip() +\nlabs(\ntitle = \"Most Early Departures by Airline\",\nx = \"Airline\",\ny = \"Maximum Early Departure (minutes)\"\n) +\ntheme_minimal(base_size = 14)\n\n\n\n\n\n\n\n\nThe visualization highlights which airlines had the earliest recorded departures, meaning the most negative delay times. Airlines at the top of the chart departed significantly earlier than their scheduled times. This helps us understand which carriers tend to push out flights ahead of schedule — an operational behavior that may influence passenger satisfaction and on-time performance metrics."
+  },
+  {
+    "objectID": "q2.html#sql-query-used",
+    "href": "q2.html#sql-query-used",
+    "title": "Q2 – Maximum Early Departures by Airline",
+    "section": "",
+    "text": "SELECT \n    Reporting_Airline AS airline,\n    MIN(DepDelay) AS max_early_departure\nFROM al_perf\nGROUP BY Reporting_Airline\nORDER BY max_early_departure ASC;"
+  },
+  {
+    "objectID": "q2.html#output",
+    "href": "q2.html#output",
+    "title": "Q2 – Maximum Early Departures by Airline",
+    "section": "",
+    "text": "The output of this SQL query is saved as Question 2 output.csv, and is provided below.\n\nlibrary(tidyverse)\nq2 &lt;- read_csv(\"data/Question 2 output.csv\")\nq2\n\n# A tibble: 19 × 2\n   airline           max_early_departure\n   &lt;chr&gt;                           &lt;dbl&gt;\n 1 AS                               -114\n 2 OO                                -60\n 3 DL                                -37\n 4 G4                                -35\n 5 MQ                                -34\n 6 OH                                -32\n 7 NK                                -31\n 8 B6                                -31\n 9 EV                                -30\n10 WN                                -29\n11 YX                                -27\n12 AA                                -25\n13 F9                                -25\n14 9E                                -23\n15 YV                                -23\n16 VX                                -23\n17 UA                                -23\n18 HA                                -21\n19 Reporting_Airline                   0"
+  },
+  {
+    "objectID": "q2.html#visualization",
+    "href": "q2.html#visualization",
+    "title": "Q2 – Maximum Early Departures by Airline",
+    "section": "",
+    "text": "q2 %&gt;%\nggplot(aes(x = reorder(airline, max_early_departure),\ny = max_early_departure)) +\ngeom_col(fill = \"#4C72B0\") +\ncoord_flip() +\nlabs(\ntitle = \"Most Early Departures by Airline\",\nx = \"Airline\",\ny = \"Maximum Early Departure (minutes)\"\n) +\ntheme_minimal(base_size = 14)\n\n\n\n\n\n\n\n\nThe visualization highlights which airlines had the earliest recorded departures, meaning the most negative delay times. Airlines at the top of the chart departed significantly earlier than their scheduled times. This helps us understand which carriers tend to push out flights ahead of schedule — an operational behavior that may influence passenger satisfaction and on-time performance metrics."
+  },
+  {
+    "objectID": "q3.html",
+    "href": "q3.html",
+    "title": "Q3 – Ranking Days of the Week by Flight Volume",
+    "section": "",
+    "text": "Rank days of the week by the total number of flights (1 = busiest).\nOutput the day name, number of flights, and the rank.\n\n\nWITH day_counts AS (\n    SELECT \n        DayOfWeek,\n        COUNT(*) AS flight_count\n    FROM al_perf\n    GROUP BY DayOfWeek\n),\nranked AS (\n    SELECT\n        CASE DayOfWeek\n            WHEN 1 THEN 'Monday'\n            WHEN 2 THEN 'Tuesday'\n            WHEN 3 THEN 'Wednesday'\n            WHEN 4 THEN 'Thursday'\n            WHEN 5 THEN 'Friday'\n            WHEN 6 THEN 'Saturday'\n            WHEN 7 THEN 'Sunday'\n        END AS day_name,\n        flight_count,\n        RANK() OVER (ORDER BY flight_count DESC) AS day_rank\n    FROM day_counts\n)\nSELECT *\nFROM ranked\nORDER BY day_rank;\n\n\n\nThe output of this SQL query is saved as Question 3 output.csv, and is provided below.\n\nlibrary(tidyverse)\n\nq3 &lt;- read_csv(\"data/Question 3 output.csv\")\nq3\n\n# A tibble: 8 × 3\n  day_name  flight_count day_rank\n  &lt;chr&gt;            &lt;dbl&gt;    &lt;dbl&gt;\n1 Friday          102866        1\n2 Thursday        102437        2\n3 Saturday         84778        3\n4 Monday           82000        4\n5 Wednesday        81039        5\n6 Tuesday          80177        6\n7 Sunday           78737        7\n8 NULL                 1        8\n\n\n\n\n\n\nq3$day_name &lt;- factor(\n  q3$day_name,\n  levels = c(\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\")\n)\n\nq3 %&gt;%\n  ggplot(aes(x = day_name, y = flight_count)) +\n  geom_col(fill = \"#4C72B0\") +\n  labs(\n    title = \"Flight Volume by Day of the Week\",\n    x = \"Day of Week\",\n    y = \"Number of Flights\"\n  ) +\n  theme_minimal(base_size = 16) +\n  theme(\n    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),\n    plot.title = element_text(size = 22, face = \"bold\", hjust = 0.5)\n  )\n\n\n\n\n\n\n\n\nThe chart shows a clear weekly rhythm in U.S. flight activity, with Thursday and Friday standing out as the busiest travel days, each handling over 100,000 flights. Sunday through Wednesday maintain moderate and fairly consistent traffic levels, reflecting steady weekday demand. Saturday experiences a noticeable dip, making it the least active day of the week aside from missing values, which aligns with lower weekend business travel."
+  },
+  {
+    "objectID": "q3.html#sql-query",
+    "href": "q3.html#sql-query",
+    "title": "Q3 – Ranking Days of the Week by Flight Volume",
+    "section": "",
+    "text": "WITH day_counts AS (\n    SELECT \n        DayOfWeek,\n        COUNT(*) AS flight_count\n    FROM al_perf\n    GROUP BY DayOfWeek\n),\nranked AS (\n    SELECT\n        CASE DayOfWeek\n            WHEN 1 THEN 'Monday'\n            WHEN 2 THEN 'Tuesday'\n            WHEN 3 THEN 'Wednesday'\n            WHEN 4 THEN 'Thursday'\n            WHEN 5 THEN 'Friday'\n            WHEN 6 THEN 'Saturday'\n            WHEN 7 THEN 'Sunday'\n        END AS day_name,\n        flight_count,\n        RANK() OVER (ORDER BY flight_count DESC) AS day_rank\n    FROM day_counts\n)\nSELECT *\nFROM ranked\nORDER BY day_rank;"
+  },
+  {
+    "objectID": "q3.html#output",
+    "href": "q3.html#output",
+    "title": "Q3 – Ranking Days of the Week by Flight Volume",
+    "section": "",
+    "text": "The output of this SQL query is saved as Question 3 output.csv, and is provided below.\n\nlibrary(tidyverse)\n\nq3 &lt;- read_csv(\"data/Question 3 output.csv\")\nq3\n\n# A tibble: 8 × 3\n  day_name  flight_count day_rank\n  &lt;chr&gt;            &lt;dbl&gt;    &lt;dbl&gt;\n1 Friday          102866        1\n2 Thursday        102437        2\n3 Saturday         84778        3\n4 Monday           82000        4\n5 Wednesday        81039        5\n6 Tuesday          80177        6\n7 Sunday           78737        7\n8 NULL                 1        8"
+  },
+  {
+    "objectID": "q3.html#visualization",
+    "href": "q3.html#visualization",
+    "title": "Q3 – Ranking Days of the Week by Flight Volume",
+    "section": "",
+    "text": "q3$day_name &lt;- factor(\n  q3$day_name,\n  levels = c(\"Sunday\", \"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\")\n)\n\nq3 %&gt;%\n  ggplot(aes(x = day_name, y = flight_count)) +\n  geom_col(fill = \"#4C72B0\") +\n  labs(\n    title = \"Flight Volume by Day of the Week\",\n    x = \"Day of Week\",\n    y = \"Number of Flights\"\n  ) +\n  theme_minimal(base_size = 16) +\n  theme(\n    axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1),\n    plot.title = element_text(size = 22, face = \"bold\", hjust = 0.5)\n  )\n\n\n\n\n\n\n\n\nThe chart shows a clear weekly rhythm in U.S. flight activity, with Thursday and Friday standing out as the busiest travel days, each handling over 100,000 flights. Sunday through Wednesday maintain moderate and fairly consistent traffic levels, reflecting steady weekday demand. Saturday experiences a noticeable dip, making it the least active day of the week aside from missing values, which aligns with lower weekend business travel."
+  },
+  {
+    "objectID": "q2.html#sql-query",
+    "href": "q2.html#sql-query",
+    "title": "Q2 – Maximum Early Departures by Airline",
+    "section": "",
+    "text": "SELECT \n    Reporting_Airline AS airline,\n    MIN(DepDelay) AS max_early_departure\nFROM al_perf\nGROUP BY Reporting_Airline\nORDER BY max_early_departure ASC;"
+  },
+  {
+    "objectID": "q4.html",
+    "href": "q4.html",
+    "title": "Q4 – Airport with Highest Average Departure Delay",
+    "section": "",
+    "text": "Find the airport that has the highest average departure delay among all airports.\nConsider 0 minutes delay for flights that departed early.\nOutput the airport name, airport code, and the average delay.\n\n\nSELECT\n  OriginAirportName AS airport_name,\n  OriginAirportCode AS airport_code,\n  AVG(GREATEST(DepDelay, 0)) AS avg_delay\nFROM al_perf\nGROUP BY OriginAirportName, OriginAirportCode\nORDER BY avg_delay DESC\nLIMIT 1;\n\n\n\nThe output of this SQL query is saved as Question 4 output.csv, and is provided below.\n\nlibrary(tidyverse)\n\nq4 &lt;- read_csv(\"data/Question 4 output.csv\")\nq4\n\n# A tibble: 1 × 3\n  airport_name   airport_code avg_delay\n  &lt;chr&gt;          &lt;chr&gt;            &lt;dbl&gt;\n1 Binghamton, NY BGM               46.2\n\n\n\n\n\n\nq4 %&gt;%\nggplot(aes(x = airport_code, y = avg_delay)) +\ngeom_col(fill = \"#4C72B0\") +\nlabs(\ntitle = \"Airport with the Highest Average Departure Delay\",\nx = \"Airport Code\",\ny = \"Average Delay (minutes)\"\n) +\ntheme_minimal(base_size = 14)\n\n\n\n\n\n\n\n\nThe visual for this output is not going to provide a lot of information as the question is only asking for the airport with the highest average departure delay. As we can see, the answer is Bingham airport in New York."
+  },
+  {
+    "objectID": "q4.html#sql-query",
+    "href": "q4.html#sql-query",
+    "title": "Q4 – Airport with Highest Average Departure Delay",
+    "section": "",
+    "text": "SELECT\n  OriginAirportName AS airport_name,\n  OriginAirportCode AS airport_code,\n  AVG(GREATEST(DepDelay, 0)) AS avg_delay\nFROM al_perf\nGROUP BY OriginAirportName, OriginAirportCode\nORDER BY avg_delay DESC\nLIMIT 1;"
+  },
+  {
+    "objectID": "q4.html#output",
+    "href": "q4.html#output",
+    "title": "Q4 – Airport with Highest Average Departure Delay",
+    "section": "",
+    "text": "The output of this SQL query is saved as Question 4 output.csv, and is provided below.\n\nlibrary(tidyverse)\n\nq4 &lt;- read_csv(\"data/Question 4 output.csv\")\nq4\n\n# A tibble: 1 × 3\n  airport_name   airport_code avg_delay\n  &lt;chr&gt;          &lt;chr&gt;            &lt;dbl&gt;\n1 Binghamton, NY BGM               46.2"
+  },
+  {
+    "objectID": "q4.html#visualization",
+    "href": "q4.html#visualization",
+    "title": "Q4 – Airport with Highest Average Departure Delay",
+    "section": "",
+    "text": "q4 %&gt;%\nggplot(aes(x = airport_code, y = avg_delay)) +\ngeom_col(fill = \"#4C72B0\") +\nlabs(\ntitle = \"Airport with the Highest Average Departure Delay\",\nx = \"Airport Code\",\ny = \"Average Delay (minutes)\"\n) +\ntheme_minimal(base_size = 14)\n\n\n\n\n\n\n\n\nThe visual for this output is not going to provide a lot of information as the question is only asking for the airport with the highest average departure delay. As we can see, the answer is Bingham airport in New York."
+  },
+  {
+    "objectID": "q5.html",
+    "href": "q5.html",
+    "title": "Q5 – Airport with Highest Average Delay per Airline",
+    "section": "",
+    "text": "For each airline, find the airport where it has the highest average departure delay.\nOutput the airline name, the airport name, and the value of that average delay.\n\n\nThe SQL Query used to answer this question is provided below.\nWITH avg_delays AS (\n  SELECT\n    Reporting_Airline AS airline,\n    OriginAirportName AS airport_name,\n    OriginAirportCode AS airport_code,\n    AVG(GREATEST(DepDelay, 0)) AS avg_delay\n  FROM al_perf\n  GROUP BY Reporting_Airline, OriginAirportName, OriginAirportCode\n),\nranked AS (\n  SELECT\n    airline,\n    airport_name,\n    airport_code,\n    avg_delay,\n    RANK() OVER (PARTITION BY airline ORDER BY avg_delay DESC) AS rnk\n  FROM avg_delays\n)\nSELECT\n  airline,\n  airport_name,\n  airport_code,\n  avg_delay\nFROM ranked\nWHERE rnk = 1\nORDER BY airline;\n\n\n\nThe output of this SQL query is saved as Question 5 output.csv, and is provided below.\n\nlibrary(tidyverse)\nq5 &lt;- read_csv(\"data/Question 5 output.csv\")\nq5\n\n# A tibble: 19 × 3\n   airline           airport_name              avg_delay\n   &lt;chr&gt;             &lt;chr&gt;                         &lt;dbl&gt;\n 1 9E                Charleston/Dunbar, WV         292. \n 2 AA                Hayden, CO                     41.5\n 3 AS                Adak Island, AK                41.8\n 4 B6                Newburgh/Poughkeepsie, NY      50.7\n 5 DL                Roanoke, VA                    47.9\n 6 EV                Burlington, VT                 63.1\n 7 F9                Columbus, OH                   33  \n 8 G4                Clarksburg/Fairmont, WV       109. \n 9 HA                Oakland, CA                    20.9\n10 MQ                Florence, SC                   47.3\n11 NK                Latrobe, PA                    27.1\n12 OH                New York, NY                   27.7\n13 OO                Tampa, FL                      98.5\n14 Reporting_Airline OriginCityName                  0  \n15 UA                Asheville, NC                  39.2\n16 VX                Kona, HI                       33.6\n17 WN                Los Angeles, CA                26.4\n18 YV                Killeen, TX                    36.7\n19 YX                Greer, SC                      42  \n\n\n\n\n\n\nq5 %&gt;%\nggplot(aes(x = reorder(airline, avg_delay), y = avg_delay)) +\ngeom_col(fill = \"#4C72B0\") +\ncoord_flip() +\nlabs(\ntitle = \"Airline Worst-Delay Airport (Highest Avg Delay)\",\nx = \"Airline\",\ny = \"Average Delay at Worst Airport (minutes)\"\n) +\ntheme_minimal(base_size = 14)\n\n\n\n\n\n\n\n\nThe chart shows the airport where each airline experiences its highest average departure delay, revealing large differences between carriers. One airline in particular (9E) faces dramatically higher delays at its worst airport—nearly 300 minutes on average—far exceeding all others. This highlights how operational bottlenecks can be highly localized and suggests that targeted improvements at specific airports could significantly reduce delays for certain airlines."
+  },
+  {
+    "objectID": "q5.html#sql-query",
+    "href": "q5.html#sql-query",
+    "title": "Q5 – Airport with Highest Average Delay per Airline",
+    "section": "",
+    "text": "The SQL Query used to answer this question is provided below.\nWITH avg_delays AS (\n  SELECT\n    Reporting_Airline AS airline,\n    OriginAirportName AS airport_name,\n    OriginAirportCode AS airport_code,\n    AVG(GREATEST(DepDelay, 0)) AS avg_delay\n  FROM al_perf\n  GROUP BY Reporting_Airline, OriginAirportName, OriginAirportCode\n),\nranked AS (\n  SELECT\n    airline,\n    airport_name,\n    airport_code,\n    avg_delay,\n    RANK() OVER (PARTITION BY airline ORDER BY avg_delay DESC) AS rnk\n  FROM avg_delays\n)\nSELECT\n  airline,\n  airport_name,\n  airport_code,\n  avg_delay\nFROM ranked\nWHERE rnk = 1\nORDER BY airline;"
+  },
+  {
+    "objectID": "q5.html#output",
+    "href": "q5.html#output",
+    "title": "Q5 – Airport with Highest Average Delay per Airline",
+    "section": "",
+    "text": "The output of this SQL query is saved as Question 5 output.csv, and is provided below.\n\nlibrary(tidyverse)\nq5 &lt;- read_csv(\"data/Question 5 output.csv\")\nq5\n\n# A tibble: 19 × 3\n   airline           airport_name              avg_delay\n   &lt;chr&gt;             &lt;chr&gt;                         &lt;dbl&gt;\n 1 9E                Charleston/Dunbar, WV         292. \n 2 AA                Hayden, CO                     41.5\n 3 AS                Adak Island, AK                41.8\n 4 B6                Newburgh/Poughkeepsie, NY      50.7\n 5 DL                Roanoke, VA                    47.9\n 6 EV                Burlington, VT                 63.1\n 7 F9                Columbus, OH                   33  \n 8 G4                Clarksburg/Fairmont, WV       109. \n 9 HA                Oakland, CA                    20.9\n10 MQ                Florence, SC                   47.3\n11 NK                Latrobe, PA                    27.1\n12 OH                New York, NY                   27.7\n13 OO                Tampa, FL                      98.5\n14 Reporting_Airline OriginCityName                  0  \n15 UA                Asheville, NC                  39.2\n16 VX                Kona, HI                       33.6\n17 WN                Los Angeles, CA                26.4\n18 YV                Killeen, TX                    36.7\n19 YX                Greer, SC                      42"
+  },
+  {
+    "objectID": "q5.html#visualization",
+    "href": "q5.html#visualization",
+    "title": "Q5 – Airport with Highest Average Delay per Airline",
+    "section": "",
+    "text": "q5 %&gt;%\nggplot(aes(x = reorder(airline, avg_delay), y = avg_delay)) +\ngeom_col(fill = \"#4C72B0\") +\ncoord_flip() +\nlabs(\ntitle = \"Airline Worst-Delay Airport (Highest Avg Delay)\",\nx = \"Airline\",\ny = \"Average Delay at Worst Airport (minutes)\"\n) +\ntheme_minimal(base_size = 14)\n\n\n\n\n\n\n\n\nThe chart shows the airport where each airline experiences its highest average departure delay, revealing large differences between carriers. One airline in particular (9E) faces dramatically higher delays at its worst airport—nearly 300 minutes on average—far exceeding all others. This highlights how operational bottlenecks can be highly localized and suggests that targeted improvements at specific airports could significantly reduce delays for certain airlines."
+  },
+  {
+    "objectID": "q6.html",
+    "href": "q6.html",
+    "title": "Q5 - Cancelled Flights",
+    "section": "",
+    "text": "** Check if your dataset has any canceled flights.**\n\n\nThe SQL Query used to answer this question is provided below.\nSELECT COUNT(*) AS canceled_flights\nFROM al_perf\nWHERE Cancelled = 1;"
+  },
+  {
+    "objectID": "q6.html#sql-query",
+    "href": "q6.html#sql-query",
+    "title": "Q5 - Cancelled Flights",
+    "section": "",
+    "text": "The SQL Query used to answer this question is provided below.\nWITH avg_delays AS (\n  SELECT\n    Reporting_Airline AS airline,\n    OriginAirportName AS airport_name,\n    OriginAirportCode AS airport_code,\n    AVG(GREATEST(DepDelay, 0)) AS avg_delay\n  FROM al_perf\n  GROUP BY Reporting_Airline, OriginAirportName, OriginAirportCode\n),\nranked AS (\n  SELECT\n    airline,\n    airport_name,\n    airport_code,\n    avg_delay,\n    RANK() OVER (PARTITION BY airline ORDER BY avg_delay DESC) AS rnk\n  FROM avg_delays\n)\nSELECT\n  airline,\n  airport_name,\n  airport_code,\n  avg_delay\nFROM ranked\nWHERE rnk = 1\nORDER BY airline;"
+  },
+  {
+    "objectID": "q6.html#output",
+    "href": "q6.html#output",
+    "title": "Q5 - Cancelled Flights",
+    "section": "Output",
+    "text": "Output\nThe output of this SQL query is saved as Question 6b output.csv, and is provided below.\n\nlibrary(tidyverse)\n\nq6b &lt;- read_csv(\"data/Question 6b output.csv\")\nq6b\n\n# A tibble: 313 × 4\n   airport_name                   airport_code reason cancel_count\n   &lt;chr&gt;                          &lt;chr&gt;        &lt;chr&gt;         &lt;dbl&gt;\n 1 Abilene, TX                    ABI          C                 1\n 2 Aguadilla, PR                  BQN          B                 3\n 3 Akron, OH                      CAK          B                19\n 4 Albany, NY                     ALB          B                61\n 5 Albuquerque, NM                ABQ          B                 9\n 6 Alexandria, LA                 AEX          C                 2\n 7 Alexandria, LA                 AEX          B                 2\n 8 Allentown/Bethlehem/Easton, PA ABE          B                19\n 9 Alpena, MI                     APN          A                 1\n10 Amarillo, TX                   AMA          C                 3\n# ℹ 303 more rows"
+  },
+  {
+    "objectID": "q6.html#visualization",
+    "href": "q6.html#visualization",
+    "title": "Q5 - Cancelled Flights",
+    "section": "Visualization",
+    "text": "Visualization\n\nlibrary(tidyverse)\n\n# ----------------------------\n# Load Q6b cancellation data\n# ----------------------------\nq6b &lt;- read_csv(\"data/Question 6b output.csv\")\n\n# ----------------------------\n# Load FAA/OpenFlights Airport Coordinates\n# ----------------------------\nfaa_airports &lt;- read_csv(\n  \"https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat\",\n  col_names = FALSE\n) %&gt;%\n  select(\n    airport_id = X1,\n    airport_name = X2,\n    city = X3,\n    country = X4,\n    IATA = X5,\n    latitude = X7,\n    longitude = X8\n  ) %&gt;%\n  filter(country == \"United States\", !is.na(IATA), IATA != \"\\\\N\")\n\n# ----------------------------\n# Join Q6b cancellations with airport coordinates\n# ----------------------------\nq6_map &lt;- q6b %&gt;%\n  left_join(faa_airports, by = c(\"airport_code\" = \"IATA\"))\n\n# ----------------------------\n# Plot U.S. map with cancellation bubbles\n# ----------------------------\nstates_map &lt;- map_data(\"state\")\n\nggplot() +\n  geom_polygon(\n    data = states_map,\n    aes(x = long, y = lat, group = group),\n    fill = \"gray95\", color = \"white\"\n  ) +\n  geom_point(\n    data = q6_map,\n    aes(x = longitude, y = latitude, size = cancel_count),\n    color = \"#4C72B0\", alpha = 0.7\n  ) +\n  scale_size_continuous(range = c(2, 10)) +\n  coord_fixed(1.3) +\n  labs(\n    title = \"Flight Cancellations by Airport (Q6b)\",\n    x = \"Longitude\",\n    y = \"Latitude\",\n    size = \"Cancellation Count\"\n  ) +\n  theme_minimal(base_size = 14)\n\n\n\n\n\n\n\n\nThe map shows how flight cancellations in March 2018 are distributed across U.S. airports, with larger points indicating airports experiencing higher cancellation volumes. Most cancellations cluster around major hubs in the eastern and central United States, where traffic density is highest. A few western airports also show elevated cancellation counts, highlighting how both weather patterns and congestion can drive regional differences in flight disruptions."
+  },
+  {
+    "objectID": "q6.html#sql-query-for-6a",
+    "href": "q6.html#sql-query-for-6a",
+    "title": "Q5 - Cancelled Flights",
+    "section": "",
+    "text": "The SQL Query used to answer this question is provided below.\nSELECT COUNT(*) AS canceled_flights\nFROM al_perf\nWHERE Cancelled = 1;"
+  },
+  {
+    "objectID": "q7.html",
+    "href": "q7.html",
+    "title": "Q7 – 3-Day Rolling Average of Daily Flight Volume",
+    "section": "",
+    "text": "Build a report that, for each day, outputs the average number of flights over the preceding 3 days.\n\n\nThe SQL Query used to answer this question is provided below.\nWITH daily_counts AS (\n    SELECT\n        FlightDate,\n        COUNT(*) AS flight_count\n    FROM al_perf\n    GROUP BY FlightDate\n)\nSELECT\n    FlightDate,\n    flight_count,\n    ROUND(\n        AVG(flight_count) OVER (\n            ORDER BY FlightDate\n            ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING\n        ), 2\n    ) AS avg_prev_3_days\nFROM daily_counts\nORDER BY FlightDate;\n\n\n\nThe output of this SQL query is saved as Question 7 output.csv, and is provided below.\n\nlibrary(tidyverse)\nq7 &lt;- read_csv(\"data/Question 7 output.csv\")\nq7\n\n# A tibble: 32 × 3\n   FlightDate flight_count avg_prev_3_days\n   &lt;chr&gt;             &lt;dbl&gt; &lt;chr&gt;          \n 1 2018-03-01        20004 NULL           \n 2 2018-03-02        20225 20004.00       \n 3 2018-03-03        16128 20114.50       \n 4 2018-03-04        18978 18785.67       \n 5 2018-03-05        20161 18443.67       \n 6 2018-03-06        19673 18422.33       \n 7 2018-03-07        19924 19604.00       \n 8 2018-03-08        20417 19919.33       \n 9 2018-03-09        20609 20004.67       \n10 2018-03-10        17180 20316.67       \n# ℹ 22 more rows\n\n\n\n\n\n\nq7 &lt;- q7 %&gt;%\n  mutate(\n    FlightDate = as.Date(FlightDate),\n    avg_prev_3_days = na_if(avg_prev_3_days, \"NULL\"),\n    avg_prev_3_days = as.numeric(avg_prev_3_days)\n  )\n\nq7 %&gt;%\n  ggplot(aes(x = FlightDate)) +\n  geom_line(aes(y = flight_count), color = \"#4C72B0\", linewidth = 1) +\n  geom_line(aes(y = avg_prev_3_days), color = \"#DD8452\", linewidth = 1, linetype = \"dashed\") +\n  labs(\n    title = \"Daily Flight Counts with 3-Day Rolling Average\",\n    x = \"Date\",\n    y = \"Number of Flights\",\n    caption = \"Solid blue = daily flights | Dashed orange = 3-day rolling average\"\n  ) +\n  theme_minimal(base_size = 14)\n\nWarning: Removed 1 row containing missing values or values outside the scale range\n(`geom_line()`).\n\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_line()`).\n\n\n\n\n\n\n\n\n\nThe daily flight counts show a consistent weekly rhythm, with noticeable dips roughly once every seven days—likely corresponding to lower weekend travel volume. The 3-day rolling average smooths these fluctuations, revealing a stable overall trend of around 19,000–21,000 flights per day throughout March 2018. This smoothed trend provides a clearer picture of underlying flight activity, helping distinguish real shifts in demand from routine day-to-day variability."
+  },
+  {
+    "objectID": "q7.html#sql-query",
+    "href": "q7.html#sql-query",
+    "title": "Q7 – 3-Day Rolling Average of Daily Flight Volume",
+    "section": "",
+    "text": "The SQL Query used to answer this question is provided below.\nWITH daily_counts AS (\n    SELECT\n        FlightDate,\n        COUNT(*) AS flight_count\n    FROM al_perf\n    GROUP BY FlightDate\n)\nSELECT\n    FlightDate,\n    flight_count,\n    ROUND(\n        AVG(flight_count) OVER (\n            ORDER BY FlightDate\n            ROWS BETWEEN 3 PRECEDING AND 1 PRECEDING\n        ), 2\n    ) AS avg_prev_3_days\nFROM daily_counts\nORDER BY FlightDate;"
+  },
+  {
+    "objectID": "q7.html#output",
+    "href": "q7.html#output",
+    "title": "Q7 – 3-Day Rolling Average of Daily Flight Volume",
+    "section": "",
+    "text": "The output of this SQL query is saved as Question 7 output.csv, and is provided below.\n\nlibrary(tidyverse)\nq7 &lt;- read_csv(\"data/Question 7 output.csv\")\nq7\n\n# A tibble: 32 × 3\n   FlightDate flight_count avg_prev_3_days\n   &lt;chr&gt;             &lt;dbl&gt; &lt;chr&gt;          \n 1 2018-03-01        20004 NULL           \n 2 2018-03-02        20225 20004.00       \n 3 2018-03-03        16128 20114.50       \n 4 2018-03-04        18978 18785.67       \n 5 2018-03-05        20161 18443.67       \n 6 2018-03-06        19673 18422.33       \n 7 2018-03-07        19924 19604.00       \n 8 2018-03-08        20417 19919.33       \n 9 2018-03-09        20609 20004.67       \n10 2018-03-10        17180 20316.67       \n# ℹ 22 more rows"
+  },
+  {
+    "objectID": "q7.html#visualization",
+    "href": "q7.html#visualization",
+    "title": "Q7 – 3-Day Rolling Average of Daily Flight Volume",
+    "section": "",
+    "text": "q7 &lt;- q7 %&gt;%\n  mutate(\n    FlightDate = as.Date(FlightDate),\n    avg_prev_3_days = na_if(avg_prev_3_days, \"NULL\"),\n    avg_prev_3_days = as.numeric(avg_prev_3_days)\n  )\n\nq7 %&gt;%\n  ggplot(aes(x = FlightDate)) +\n  geom_line(aes(y = flight_count), color = \"#4C72B0\", linewidth = 1) +\n  geom_line(aes(y = avg_prev_3_days), color = \"#DD8452\", linewidth = 1, linetype = \"dashed\") +\n  labs(\n    title = \"Daily Flight Counts with 3-Day Rolling Average\",\n    x = \"Date\",\n    y = \"Number of Flights\",\n    caption = \"Solid blue = daily flights | Dashed orange = 3-day rolling average\"\n  ) +\n  theme_minimal(base_size = 14)\n\nWarning: Removed 1 row containing missing values or values outside the scale range\n(`geom_line()`).\n\n\nWarning: Removed 2 rows containing missing values or values outside the scale range\n(`geom_line()`).\n\n\n\n\n\n\n\n\n\nThe daily flight counts show a consistent weekly rhythm, with noticeable dips roughly once every seven days—likely corresponding to lower weekend travel volume. The 3-day rolling average smooths these fluctuations, revealing a stable overall trend of around 19,000–21,000 flights per day throughout March 2018. This smoothed trend provides a clearer picture of underlying flight activity, helping distinguish real shifts in demand from routine day-to-day variability."
+  }
+]
